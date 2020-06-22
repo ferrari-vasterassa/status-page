@@ -72,6 +72,21 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
   }
 
   # Initial config
+  provisioner "file" {
+    content     = cloudflare_origin_ca_certificate.origin.certificate
+    destination = "/etc/ssl/certs/origin.crt"
+  }
+
+  provisioner "file" {
+    content     = tls_private_key.origin.private_key_pem
+    destination = "/etc/ssl/private/origin.key"
+  }
+
+  provisioner "file" {
+    source      = "resources/cloudflare-origin-pull.crt"
+    destination = "/etc/ssl/certs/cloudflare-origin-pull.crt"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
