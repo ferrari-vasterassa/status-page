@@ -48,7 +48,7 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
     version   = "latest"
   }
 
-  computer_name  = "vm_1"
+  computer_name  = "vm1"
   admin_username = "azureuser"
   disable_password_authentication = true
         
