@@ -67,7 +67,7 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
     host = self.public_ip_address
     user = "azureuser"
     type = "ssh"
-    private_key = file("~/.ssh/id_rsa.pub")
+    private_key = file("~/.ssh/id_rsa")
     timeout = "2m"
   }
 
