@@ -1,42 +1,42 @@
 # Grab a public address
-resource "azurerm_public_ip" "public_ip_1" {
-  name                         = "public_ip_1"
+resource "azurerm_public_ip" "public_ip_2" {
+  name                         = "public_ip_2"
   location                     = var.az_region
   resource_group_name          = azurerm_resource_group.status_page_rg.name
   allocation_method            = "Dynamic"
 }
 
 # Add a NIC
-resource "azurerm_network_interface" "vm_1_nic" {
-    name                        = "vm_1_nic"
+resource "azurerm_network_interface" "vm_2_nic" {
+    name                        = "vm_2_nic"
     location                    = var.az_region
     resource_group_name         = azurerm_resource_group.status_page_rg.name
 
     ip_configuration {
-        name                          = "vm_1_nic_ip_config"
+        name                          = "vm_2_nic_ip_config"
         subnet_id                     = azurerm_subnet.status_page_sn.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = azurerm_public_ip.public_ip_1.id
+        public_ip_address_id          = azurerm_public_ip.public_ip_2.id
     }
 }
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "vm_1_nic_sg" {
-  network_interface_id      = azurerm_network_interface.vm_1_nic.id
+resource "azurerm_network_interface_security_group_association" "vm_2_nic_sg" {
+  network_interface_id      = azurerm_network_interface.vm_2_nic.id
   network_security_group_id = azurerm_network_security_group.front_end_sg.id
 }
 
 # Create the VM!
-resource "azurerm_linux_virtual_machine" "vm_1" {
-  name                  = "vm_1"
+resource "azurerm_linux_virtual_machine" "vm_2" {
+  name                  = "vm_2"
   location              = var.az_region
   resource_group_name   = azurerm_resource_group.status_page_rg.name
-  network_interface_ids = [azurerm_network_interface.vm_1_nic.id]
+  network_interface_ids = [azurerm_network_interface.vm_2_nic.id]
   # Pretty small please, I'm not made of money!
   size                  = "Standard_B1s"
 
   os_disk {
-    name              = "vm1_OsDisk"
+    name              = "vm2_OsDisk"
     caching           = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -48,7 +48,7 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
     version   = "latest"
   }
 
-  computer_name  = "vm1"
+  computer_name  = "vm2"
   admin_username = "azureuser"
   disable_password_authentication = true
         
@@ -104,7 +104,7 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
       "sudo apt clean",
       "sudo mv /tmp/default /etc/nginx/sites-available/",
       "sudo service nginx restart",
-      "echo \"vm-1 reports status OK\" | sudo tee /var/www/html/index.html > /dev/null"
+      "echo \"vm-2 reports status NOT OK\" | sudo tee /var/www/html/index.html > /dev/null"
     ]
   }
 }
