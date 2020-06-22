@@ -61,5 +61,25 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.status_page_sa.primary_blob_endpoint
   }
+
+  # Connection so we can do initial config:
+  connection {
+    host = self.public_ip_address
+    user = "azureuser"
+    type = "ssh"
+    private_key = file("~/.ssh/id_rsa.pub")
+    timeout = "2m"
+  }
+
+  # Initial config
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update",
+      # No need to upgrade, Azure appears to deploy fully-updated
+      #"sudo apt -y full-upgrade",
+      "sudo apt -y install nginx",
+      "sudo apt clean",
+    ]
+  }
 }
 
