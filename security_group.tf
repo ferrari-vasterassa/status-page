@@ -1,8 +1,8 @@
 # Securtity group for monitor VMs
-resource "azurerm_network_security_group" "front-end-sg" {
-  name                = "front-end-sg"
+resource "azurerm_network_security_group" "front_end_sg" {
+  name                = "front_end_sg"
   location            = var.az_region
-  resource_group_name = azurerm_resource_group.status-page-rg.name
+  resource_group_name = azurerm_resource_group.status_page_rg.name
     
   # Just SSH for now
   security_rule {

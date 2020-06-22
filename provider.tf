@@ -3,8 +3,8 @@
 # Do this by running 'az login' and following the instructions
 
 provider "azurerm" {
-  # Stick to v2.0.0, as that is what is in the terraform provider example
-  version = "=2.0.0"
+  # Use v2.1.0 to avoid authorisation error creating storage area on 2.0.0
+  version = "=2.1.0"
   features {}
 }
 
