@@ -17,19 +17,6 @@ resource "azurerm_network_security_group" "front_end_sg" {
     destination_address_prefix = "*"
   }
 
-  # HTTP
-  security_rule {
-    name                       = "HTTP"
-    priority                   = 1002
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
   # HTTPS
   security_rule {
     name                       = "HTTPS"
