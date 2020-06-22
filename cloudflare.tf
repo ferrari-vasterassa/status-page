@@ -33,7 +33,7 @@ resource "tls_cert_request" "origin" {
 
 resource "cloudflare_origin_ca_certificate" "origin" {
   csr                = tls_cert_request.origin.cert_request_pem
-  hostnames          = [ var.cloudflare_zone_filter ]
+  hostnames          = [ var.cloudflare_hostname ]
   request_type       = "origin-rsa"
   requested_validity = 7
   
