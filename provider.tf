@@ -13,6 +13,7 @@ variable "cloudflare_email" {}
 variable "cloudflare_api_key" {}
 variable "cloudflare_api_user_service_key" {}
 variable "cloudflare_zone_filter" {}
+variable "cloudflare_hostname" {}
 
 provider "cloudflare" {
   email = var.cloudflare_email

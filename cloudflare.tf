@@ -6,7 +6,7 @@ data "cloudflare_zones" "status_page_cf_zones" {
   }
 }
 
-resource "cloudflare_record" "tf" {
+resource "cloudflare_record" "status_page" {
   zone_id = lookup(data.cloudflare_zones.status_page_cf_zones.zones[0], "id")
   # DNS record name to create (A/AAAA)
   name    = "status-page"
@@ -26,7 +26,7 @@ resource "tls_cert_request" "origin" {
   private_key_pem = tls_private_key.origin.private_key_pem
 
   subject {
-    common_name  = "status-page.${var.cloudflare_zone_filter}"
+    common_name  = var.cloudflare_hostname
     organization = "Widgets, Inc"
   }
 }
