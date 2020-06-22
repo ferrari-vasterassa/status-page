@@ -26,7 +26,7 @@ resource "tls_cert_request" "origin" {
   private_key_pem = tls_private_key.origin.private_key_pem
 
   subject {
-    common_name  = var.cloudflare_zone_filter
+    common_name  = "status-page.${var.cloudflare_zone_filter}"
     organization = "Widgets, Inc"
   }
 }
