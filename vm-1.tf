@@ -3,7 +3,8 @@ resource "azurerm_public_ip" "public_ip_1" {
   name                         = "public_ip_1"
   location                     = var.az_region
   resource_group_name          = azurerm_resource_group.status_page_rg.name
-  allocation_method            = "Dynamic"
+  allocation_method            = "Static"
+  sku                          = "standard"
 }
 
 # Add a NIC
@@ -24,6 +25,13 @@ resource "azurerm_network_interface" "vm_1_nic" {
 resource "azurerm_network_interface_security_group_association" "vm_1_nic_sg" {
   network_interface_id      = azurerm_network_interface.vm_1_nic.id
   network_security_group_id = azurerm_network_security_group.front_end_sg.id
+}
+
+# Add the NIC to the LB
+resource "azurerm_network_interface_backend_address_pool_association" "vm_1_lb_pool_assoc" {
+  network_interface_id    = azurerm_network_interface.vm_1_nic.id
+  ip_configuration_name   = "vm_1_nic_ip_config"
+  backend_address_pool_id = azurerm_lb_backend_address_pool.status_page_backend_pool.id
 }
 
 # Create the VM!
@@ -92,3 +100,4 @@ resource "azurerm_backup_protected_vm" "vm_1_backup_association" {
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
 */
+
