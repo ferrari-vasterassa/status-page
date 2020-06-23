@@ -91,7 +91,7 @@ resource "azurerm_linux_virtual_machine" "vm_2" {
     ]
   }
 }
-/* Hold off on backups for now, they make it so resource groups can't be deleted during development
+
 # Backup policy VM association
 resource "azurerm_backup_protected_vm" "vm_2_backup_association" {
   resource_group_name = azurerm_resource_group.status_page_rg.name
@@ -99,4 +99,4 @@ resource "azurerm_backup_protected_vm" "vm_2_backup_association" {
   source_vm_id        = azurerm_linux_virtual_machine.vm_2.id
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
-*/
+
