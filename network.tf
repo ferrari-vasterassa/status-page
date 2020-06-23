@@ -13,6 +13,6 @@ resource "azurerm_subnet" "status_page_sn" {
   resource_group_name  = azurerm_resource_group.status_page_rg.name
   virtual_network_name = azurerm_virtual_network.virtual_nw.name
   # Acutal subnet we'll use.  Doesn't need to be big.
-  address_prefix       = "10.34.85.0/28"
+  address_prefixes     = ["10.34.85.0/28"]
 }
 

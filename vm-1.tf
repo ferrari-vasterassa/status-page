@@ -72,40 +72,23 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
   }
 
   # Initial config
-  provisioner "file" {
-    content     = cloudflare_origin_ca_certificate.origin.certificate
-    destination = "/tmp/origin.crt"
-  }
-
-  provisioner "file" {
-    content     = tls_private_key.origin.private_key_pem
-    destination = "/tmp/origin.key"
-  }
-
-  provisioner "file" {
-    source      = "resources/cloudflare-origin-pull.crt"
-    destination = "/tmp/cloudflare-origin-pull.crt"
-  }
-
-  provisioner "file" {
-    source      = "resources/default"
-    destination = "/tmp/default"
-  }
-
   provisioner "remote-exec" {
     inline = [
-      "sudo mv /tmp/origin.crt /etc/ssl/certs/",
-      "sudo mv /tmp/origin.key /etc/ssl/private/",
-      "sudo mv /tmp/cloudflare-origin-pull.crt /etc/ssl/certs/",
       "sudo apt update",
       # No need to upgrade, Azure appears to deploy fully-updated
       #"sudo apt -y full-upgrade",
       "sudo apt -y install nginx",
       "sudo apt clean",
-      "sudo mv /tmp/default /etc/nginx/sites-available/",
-      "sudo service nginx restart",
       "echo \"vm-1 reports status OK\" | sudo tee /var/www/html/index.html > /dev/null"
     ]
   }
+}
+
+# Backup policy VM association
+resource "azurerm_backup_protected_vm" "vm_1_backup_association" {
+  resource_group_name = azurerm_resource_group.status_page_rg.name
+  recovery_vault_name = azurerm_recovery_services_vault.status_page_backup_vault.name
+  source_vm_id        = azurerm_linux_virtual_machine.vm_1.id
+  backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
 
