@@ -1,4 +1,4 @@
-# Securtity group for monitor VMs
+# Security group for monitor VMs
 resource "azurerm_network_security_group" "front_end_sg" {
   name                = "front_end_sg"
   location            = var.az_region
@@ -17,7 +17,7 @@ resource "azurerm_network_security_group" "front_end_sg" {
     destination_address_prefix = "*"
   }
 
-  # HTTPS
+  # HTTP
   security_rule {
     name                       = "HTTP"
     priority                   = 1002
