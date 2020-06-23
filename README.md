@@ -1,6 +1,8 @@
 # status-page
 Load-balanced status page
 
+Spins up 2 VMs behind a load balancer
+
 Use:
 
 ```shell
