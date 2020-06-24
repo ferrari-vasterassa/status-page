@@ -1,3 +1,4 @@
+/* Hold off on backups for now, makes iteration too slow
 # Create a backup vault
 resource "azurerm_recovery_services_vault" "status_page_backup_vault" {
   # Name can't include underscores
@@ -22,4 +23,4 @@ resource "azurerm_backup_policy_vm" "status_page_backup_policy" {
     count = 10
   }
 }
-
+*/

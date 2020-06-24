@@ -79,11 +79,19 @@ resource "azurerm_linux_virtual_machine" "db_vm" {
       # No need to upgrade, Azure appears to deploy fully-updated
       #"sudo apt -y full-upgrade",
       "sudo apt -y install postgresql postgresql-contrib",
-      "sudo apt clean"
+      "sudo apt clean",
+      # TODO - set up actual authentication, this is nowhere near secure!
+      "echo hostssl all all 10.34.85.0/28 trust | sudo tee -a /etc/postgresql/11/main/pg_hba.conf > /dev/null",
+      "sudo service postgresql reload",
+      "sudo -u postgres createdb monitoring > /dev/null",
+      "echo \"create table monitoring (ts timestamp with time zone not null default now(), value integer not null);\" | sudo -u postgres psql monitoring postgres > /dev/null",
+      # Figuring out how many escapes to add is a pain!
+      "echo \"* * * * * /usr/bin/echo \\\"insert into monitoring (value) select floor(random() * 100)::int;\\\" | /usr/bin/psql monitoring\" | sudo tee /var/spool/cron/crontabs/postgres",
+      "sudo chown postgres:crontab /var/spool/cron/crontabs/postgres"
     ]
   }
 }
-
+/* Hold off on backups for now, makes iteration too slow
 # Backup policy VM association
 resource "azurerm_backup_protected_vm" "db_vm_backup_association" {
   resource_group_name = azurerm_resource_group.status_page_rg.name
@@ -91,4 +99,4 @@ resource "azurerm_backup_protected_vm" "db_vm_backup_association" {
   source_vm_id        = azurerm_linux_virtual_machine.db_vm.id
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
-
+*/
