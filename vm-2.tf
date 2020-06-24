@@ -86,6 +86,12 @@ resource "azurerm_linux_virtual_machine" "vm_2" {
     destination = "/tmp/monitor.py"
   }
 
+  provisioner "file" {
+    # Nginx config
+    source      = "resources/nginx.default"
+    destination = "/tmp/nginx.default"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
@@ -94,7 +100,9 @@ resource "azurerm_linux_virtual_machine" "vm_2" {
       "sudo apt -y install nginx python3-psycopg2",
       "sudo apt clean",
       # Very hacky, not for use in prod; checks on state of DB values, responds to http on port 8080
-      "screen -d -m python3 /tmp/monitor.py"
+      "/usr/bin/screen -d -m python3 /tmp/monitor.py",
+      "sudo mv /tmp/nginx.default /etc/nginx/sites-available/default",
+      "sudo service nginx restart"
     ]
   }
 }
