@@ -93,9 +93,8 @@ resource "azurerm_linux_virtual_machine" "vm_1" {
       #"sudo apt -y full-upgrade",
       "sudo apt -y install nginx python3-psycopg2",
       "sudo apt clean",
-      "echo \"vm-1 reports status OK\" | sudo tee /var/www/html/index.html > /dev/null",
       # Very hacky, not for use in prod; checks on state of DB values, responds to http on port 8080
-      "nohup /usr/bin/python3 /tmp/monitor.py &"
+      "screen -d -m python3 /tmp/monitor.py"
     ]
   }
 }
