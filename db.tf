@@ -99,7 +99,7 @@ resource "azurerm_linux_virtual_machine" "db_vm" {
     ]
   }
 }
-/* Hold off on backups for now, makes iteration too slow
+
 # Backup policy VM association
 resource "azurerm_backup_protected_vm" "db_vm_backup_association" {
   resource_group_name = azurerm_resource_group.status_page_rg.name
@@ -107,4 +107,4 @@ resource "azurerm_backup_protected_vm" "db_vm_backup_association" {
   source_vm_id        = azurerm_linux_virtual_machine.db_vm.id
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
-*/
+
