@@ -91,7 +91,8 @@ resource "azurerm_linux_virtual_machine" "db_vm" {
       # TODO - set up actual authentication, this is nowhere near secure!
       "echo hostssl all all 10.34.85.0/28 trust | sudo tee -a /etc/postgresql/11/main/pg_hba.conf > /dev/null",
       "echo \"listen_addresses = '*'\" | sudo tee -a /etc/postgresql/11/main/postgresql.conf > /dev/null",
-      "sudo service postgresql reload",
+      # Need to do full reload as we're changing listening addresses:
+      "sudo service postgresql restart",
       "sudo -u postgres createdb monitoring > /dev/null",
       "echo \"create table monitoring (ts timestamp with time zone not null default now(), value integer not null);\" | sudo -u postgres psql monitoring postgres > /dev/null",
       "sudo -u postgres crontab /tmp/postgres.cron"
