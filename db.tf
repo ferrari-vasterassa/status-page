@@ -16,7 +16,9 @@ resource "azurerm_network_interface" "db_vm_nic" {
     ip_configuration {
         name                          = "db_vm_nic_ip_config"
         subnet_id                     = azurerm_subnet.status_page_sn.id
-        private_ip_address_allocation = "Dynamic"
+        # Use a static address so the other VMs know where to connect.
+        private_ip_address_allocation = "Static"
+        private_ip_address            = "10.34.85.10"
         public_ip_address_id          = azurerm_public_ip.public_ip_4.id
     }
 }
