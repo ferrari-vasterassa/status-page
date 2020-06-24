@@ -73,6 +73,12 @@ resource "azurerm_linux_virtual_machine" "db_vm" {
   }
 
   # Initial config
+  provisioner "file" {
+    # Using cron, we'll insert a random value from 0-99 into the DB every minute so we have some data to look at
+    source      = "resources/postgres.cron"
+    destination = "/tmp/postgres.cron"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
@@ -85,9 +91,7 @@ resource "azurerm_linux_virtual_machine" "db_vm" {
       "sudo service postgresql reload",
       "sudo -u postgres createdb monitoring > /dev/null",
       "echo \"create table monitoring (ts timestamp with time zone not null default now(), value integer not null);\" | sudo -u postgres psql monitoring postgres > /dev/null",
-      # Figuring out how many escapes to add is a pain!
-      "echo \"* * * * * /usr/bin/echo \\\"insert into monitoring (value) select floor(random() * 100)::int;\\\" | /usr/bin/psql monitoring\" | sudo tee /var/spool/cron/crontabs/postgres",
-      "sudo chown postgres:crontab /var/spool/cron/crontabs/postgres"
+      "sudo -u postgres crontab /tmp/postgres.cron"
     ]
   }
 }
