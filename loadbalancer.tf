@@ -48,3 +48,5 @@ resource "azurerm_lb_backend_address_pool" "status_page_backend_pool" {
   name                = "status_page_backend_pool"
 }
 
+// TODO - there must be a way to apply a security group to an LB front-end IP
+

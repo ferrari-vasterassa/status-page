@@ -21,10 +21,10 @@ resource "azurerm_network_interface" "vm_1_nic" {
     }
 }
 
-# Connect the security group to the network interface
+# Connect the VM security group to the NIC
 resource "azurerm_network_interface_security_group_association" "vm_1_nic_sg" {
   network_interface_id      = azurerm_network_interface.vm_1_nic.id
-  network_security_group_id = azurerm_network_security_group.front_end_sg.id
+  network_security_group_id = azurerm_network_security_group.vm_sg.id
 }
 
 # Add the NIC to the LB
