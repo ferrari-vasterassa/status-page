@@ -1,0 +1,1 @@
+* * * * * /usr/bin/echo "insert into monitoring (value) select floor(random() * 100)::int;" | /usr/bin/psql monitoring

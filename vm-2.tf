@@ -80,23 +80,31 @@ resource "azurerm_linux_virtual_machine" "vm_2" {
   }
 
   # Initial config
+  provisioner "file" {
+    # Monitoring script
+    source      = "resources/monitor.py"
+    destination = "/tmp/monitor.py"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "sudo apt update",
       # No need to upgrade, Azure appears to deploy fully-updated
       #"sudo apt -y full-upgrade",
-      "sudo apt -y install nginx",
+      "sudo apt -y install nginx python3-psycopg2",
       "sudo apt clean",
-      "echo \"vm-2 reports status OK\" | sudo tee /var/www/html/index.html > /dev/null"
+      "echo \"vm-2 reports status OK\" | sudo tee /var/www/html/index.html > /dev/null",
+      # Very hacky, not for use in prod; checks on state of DB values, responds to http on port 8080
+      "nohup python3 /tmp/monitor.py &"
     ]
   }
 }
 /* Hold off on backups for now, makes iteration too slow
 # Backup policy VM association
-resource "azurerm_backup_protected_vm" "vm_2_backup_association" {
+resource "azurerm_backup_protected_vm" "vm_1_backup_association" {
   resource_group_name = azurerm_resource_group.status_page_rg.name
   recovery_vault_name = azurerm_recovery_services_vault.status_page_backup_vault.name
-  source_vm_id        = azurerm_linux_virtual_machine.vm_2.id
+  source_vm_id        = azurerm_linux_virtual_machine.vm_1.id
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
 */
