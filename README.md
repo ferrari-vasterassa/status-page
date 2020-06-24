@@ -4,8 +4,11 @@ Load-balanced status page
 Spins up 2 VMs behind a load balancer, poll DB for sample count in the last 5 minutes, returns:
 
 -Error if DB is inaccessible
+
 -Warning if less than 4 samples
+
 -Warning if average of last 5 minutes' samples less than 46
+
 -OK otherwise
 
 Responds on http://<lb ip>/monitor
