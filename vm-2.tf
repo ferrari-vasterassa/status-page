@@ -108,10 +108,10 @@ resource "azurerm_linux_virtual_machine" "vm_2" {
 }
 
 # Backup policy VM association
-resource "azurerm_backup_protected_vm" "vm_1_backup_association" {
+resource "azurerm_backup_protected_vm" "vm_2_backup_association" {
   resource_group_name = azurerm_resource_group.status_page_rg.name
   recovery_vault_name = azurerm_recovery_services_vault.status_page_backup_vault.name
-  source_vm_id        = azurerm_linux_virtual_machine.vm_1.id
+  source_vm_id        = azurerm_linux_virtual_machine.vm_2.id
   backup_policy_id    = azurerm_backup_policy_vm.status_page_backup_policy.id
 }
 
