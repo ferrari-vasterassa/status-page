@@ -11,9 +11,11 @@ Spins up 2 VMs behind a load balancer, poll DB for sample count in the last 5 mi
 
 -OK otherwise
 
-Responds on http://[lb public ip]/monitor
+Responds on https://[lb public ip]/monitor
 
 DB records a random value between 0 and 99 every minute.
+
+Cloudflare DNS record & proxy setup, with hardened nginx config
 
 
 Use:
@@ -21,7 +23,7 @@ Use:
 ```shell
 $ cp env.sh.template env.sh
 $ chmod u+x env.sh
--edit env.sh, choose AZ region
+-edit env.sh, choose AZ region, add in cloudflare API keys and details
 
 $ source env.sh
 $ terraform init
