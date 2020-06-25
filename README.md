@@ -11,7 +11,7 @@ Spins up 2 VMs behind a load balancer, poll DB for sample count in the last 5 mi
 
 -OK otherwise
 
-Responds on https://[lb public ip]/monitor
+Responds on https://[assigned DNS record]/monitor
 
 DB records a random value between 0 and 99 every minute.
 
